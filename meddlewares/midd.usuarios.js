@@ -1,6 +1,7 @@
 //IMPORTO LOS MODULOS NECESARIOS
 const cors = require('cors')
 const rateLimit = require("express-rate-limit");
+const servicesUsuarios = require('../services/services.usuarios')
 
 //EXPORTO MODULOS DE SERVICIO
 module.exports.corsOption = {
@@ -18,3 +19,20 @@ module.exports.limiter = rateLimit({
     max: 10, // limit each IP to 100 requests per windowMs
     message: 'Usted exedió el limite de accesos a la API'
   });
+
+  module.exports.usuarioValido = async (req,res,next)=>{
+    try {
+        if (req.headers.authorization != undefined){
+            const token = req.headers.authorization.split(' ')[1]
+            let verificado = await servicesUsuarios.verificacionUsuario(token)
+            console.log(verificado)
+            req.params.usuario = verificado.data
+            return next()
+        }else{
+            throw new Error ('Este es un sistema seguro y requiere autorización')
+        }
+    }catch (err){
+        console.log(err.message)
+        res.status(500).json({error: err.message})
+    }
+}

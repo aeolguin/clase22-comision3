@@ -16,8 +16,10 @@ app.use(midd.limiter);
 //iniciamos nuestro servidor
 async function inicioServer() {
     try {
+        //sincronizo la DB con el servidor
+        await Usuarios.sync({alter:true})
         await sequelize.authenticate();
-        console.log('Conección estabilizada correctamente');
+        console.log('Conección con la DB estabilizada correctamente');
         app.listen(process.env.PORT, function () {
             console.log(`Sistema iniciado en htt://${process.env.HOST}:${process.env.PORT}`);
         });

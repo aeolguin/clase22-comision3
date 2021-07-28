@@ -2,7 +2,7 @@ const { Sequelize, DataTypes, Model } = require('sequelize');
 
 
 const sequelize = new Sequelize('api_jwt', null, null, {
-  dialect: 'mssql',
+  dialect: 'mssql', //mysql
   server: process.env.DB_HOST,
   port: process.env.DB_PORT,
   dialectOptions: {
